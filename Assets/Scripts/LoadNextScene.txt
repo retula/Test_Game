@@ -1,0 +1,22 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class LoadNextScene : MonoBehaviour
+{
+    // Call this method from a UI button onClick event.
+    public void LoadNext()
+    {
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        int nextSceneIndex = currentSceneIndex + 1;
+
+        // Check if the next scene index is within the available scenes in Build Settings.
+        if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
+        {
+            SceneManager.LoadScene(nextSceneIndex);
+        }
+        else
+        {
+            Debug.Log("No next scene available. This is the last scene in the build order.");
+        }
+    }
+}

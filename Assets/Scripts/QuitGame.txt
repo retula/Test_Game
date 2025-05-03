@@ -1,0 +1,16 @@
+using UnityEngine;
+
+public class QuitGame : MonoBehaviour
+{
+    // Call this method from a UI button onClick event.
+    public void Quit()
+    {
+#if UNITY_EDITOR
+        // If running in the Unity Editor, stop play mode.
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        // If running as a built application, quit the game.
+        Application.Quit();
+#endif
+    }
+}
