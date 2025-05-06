@@ -13,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
     public float airMultiplier;
     bool readyToJump;
 
+    [SerializeField] Animator animator;
+
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
 
@@ -32,6 +34,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
     }
@@ -40,7 +43,8 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         // ground check
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f * 0.2f, whatIsGround);
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight, whatIsGround);
+        // * 0.5f * 0.2f
 
         MyInput();
         SpeedControl();
@@ -82,10 +86,18 @@ public class PlayerMovement : MonoBehaviour
 
         // on ground
         if (grounded)
+        {
+            Debug.Log("we are grounded");
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
 
-        else if(!grounded)
+        }
+
+
+        else if (!grounded)
+        {
+            Debug.Log("We have the high ground");
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+        }
     }
 
 
@@ -96,10 +108,15 @@ public class PlayerMovement : MonoBehaviour
         // limit velocity if needed
         if(flatVel.magnitude > moveSpeed)
         {
+            Debug.Log("We're moving");         
             Vector3 limitedVel = flatVel.normalized * moveSpeed;
             rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
-
+            // animator.SetBool("isMoving", true);
         }
+
+        if(moveDirection != Vector3.zero)
+            animator.SetBool("isMoving", true);
+        else animator.SetBool("isMoving", false);
     }
 
 
