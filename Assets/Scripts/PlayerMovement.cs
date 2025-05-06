@@ -35,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
+        // pause = GetComponent<Canvas>();
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
     }
@@ -48,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
 
         MyInput();
         SpeedControl();
+        QuitGame();
 
         // handle drag
         if (grounded)
@@ -78,7 +80,13 @@ public class PlayerMovement : MonoBehaviour
             Invoke(nameof(ResetJump), jumpCooldown);
         }
     }
+    
 
+    private void QuitGame()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Application.Quit();
+    }
 
     private void MovePlayer()
     {
